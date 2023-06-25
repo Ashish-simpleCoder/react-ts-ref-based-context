@@ -13,7 +13,7 @@ export default function Form() {
          return old_state
       })
 
-      // you can also set like this-----
+      // you can also set like this -----
       // setState((old_state) => ({ ...old_state, [e.target.name]: e.target.value }))
    }
 
