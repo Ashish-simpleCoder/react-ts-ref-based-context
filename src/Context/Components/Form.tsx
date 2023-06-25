@@ -1,8 +1,9 @@
 import { ChangeEvent, InputHTMLAttributes, useEffect } from 'react'
-import { useStateDispatch, useStateSelector } from '../StoreContext/useStoreState'
+import { useContextActions, useStateDispatch, useStateSelector } from '../StoreContext/useStoreState'
 
 export default function Form() {
    const setState = useStateDispatch()
+   const { resetState } = useContextActions()
 
    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       // you can also set like this
@@ -19,6 +20,10 @@ export default function Form() {
 
    return (
       <div>
+         <button style={{ padding: '10px 20px', background: '#4407a7', marginBottom: '20px' }} onClick={resetState}>
+            Reset Context State
+         </button>
+
          <div style={{ border: '1px solid purple', padding: '10px' }}>
             <label htmlFor='first_name'>First name input :-</label>
             <Input id='first_name' name='first_name' placeholder='first name' onChange={(e) => handleChange(e)} />

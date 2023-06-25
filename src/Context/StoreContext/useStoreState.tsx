@@ -23,3 +23,9 @@ export function useStateDispatch() {
 
    return FormStore.set
 }
+export function useContextActions() {
+   const FormStore = useFormCtx()
+   if (!FormStore) throw new Error('no form store found.')
+
+   return FormStore.actions
+}
