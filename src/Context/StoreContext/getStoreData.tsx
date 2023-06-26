@@ -10,13 +10,13 @@ export type StoreCtxState = {
    counter: number
 }
 
-type FormCtxData = {
+type StoreCtxData = {
    get: () => StoreCtxState
    set: (value: StoreCtxState | ((state: StoreCtxState) => StoreCtxState)) => void
    observe: (cb: () => void) => () => void
 }
 
-export default function getFormCtxData(): FormCtxData {
+export default function getStoreCtxData(): StoreCtxData {
    const StoreData = useRef<StoreCtxState>({
       first_name: '',
       last_name: '',
