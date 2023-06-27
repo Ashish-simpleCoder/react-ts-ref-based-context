@@ -8,7 +8,7 @@ const StoreCtx = createContext<(ReturnType<typeof getStoreCtxData> & { actions: 
 // hook for using the form context
 export const useStoreCtx = () => useContext(StoreCtx)
 
-export function FormCtxProvider({ children }: { children: ReactNode }) {
+export function StoreCtxProvider({ children }: { children: ReactNode }) {
    const state = getStoreCtxData()
    const resetState = () => {
       state.set({ age: 0, counter: 1, details: { address: '' }, first_name: '', last_name: '' })
