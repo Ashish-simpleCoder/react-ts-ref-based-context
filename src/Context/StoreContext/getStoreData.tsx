@@ -14,7 +14,6 @@ export type StoreCtxState = {
 type StoreCtxData = {
    get: () => StoreCtxState
    set: (value: StoreCtxState | ((state: StoreCtxState) => StoreCtxState)) => void
-   setWithNoUpdate: (value: StoreCtxState | ((state: StoreCtxState) => StoreCtxState)) => void
    observe: (cb: () => void) => () => void
 }
 
@@ -35,23 +34,18 @@ export default function getStoreCtxData(): StoreCtxData {
    }, [])
 
    // set all store data
-   const set = useCallback((value: StoreCtxState | ((state: StoreCtxState) => StoreCtxState)) => {
+   const set = useCallback((value: StoreCtxState | ((state: StoreCtxState) => StoreCtxState), notify: boolean = true) => {
       if (typeof value != 'function') {
          StoreData.current = value
       } else {
          StoreData.current = value(StoreData.current)
       }
-      // notifying all of the observers
-      observers.current.forEach((observer) => observer())
+      if (notify) {
+         // notifying all of the observers
+         observers.current.forEach((observer) => observer())
+      }
    }, [])
 
-   const setWithNoUpdate = useCallback((value: StoreCtxState | ((state: StoreCtxState) => StoreCtxState)) => {
-      if (typeof value != 'function') {
-         StoreData.current = value
-      } else {
-         StoreData.current = value(StoreData.current)
-      }
-   }, [])
 
    // add the observer to the list
    const observe = useCallback((cb: () => void) => {
@@ -59,5 +53,5 @@ export default function getStoreCtxData(): StoreCtxData {
       return () => observers.current.delete(cb)
    }, [])
 
-   return { get, set, setWithNoUpdate, observe }
+   return { get, set, observe }
 }

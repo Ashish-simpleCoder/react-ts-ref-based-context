@@ -1,14 +1,13 @@
-import { ChangeEvent, InputHTMLAttributes, useEffect, useRef } from 'react'
+import { ChangeEvent, InputHTMLAttributes, useEffect } from 'react'
 import {
    useContextActions,
    useStateDispatch,
-   useStateSelector,
-   useUnWatchedStateSelector,
+   useStateSelector
 } from '../StoreContext/useStoreState'
 
 export default function Form() {
    const setState = useStateDispatch()
-   const formRef = useUnWatchedStateSelector((state) => state.formRef)
+   const formRef = useStateSelector((state) => state.formRef, false)
    const { resetState } = useContextActions()
 
    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
