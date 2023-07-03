@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { MutableRefObject, useCallback, useRef } from 'react'
 
 export type StoreCtxState = {
    first_name: string
@@ -8,11 +8,13 @@ export type StoreCtxState = {
       address: string
    }
    counter: number
+   formRef: MutableRefObject<HTMLDivElement | null>
 }
 
 type StoreCtxData = {
    get: () => StoreCtxState
    set: (value: StoreCtxState | ((state: StoreCtxState) => StoreCtxState)) => void
+   setWithNoUpdate: (value: StoreCtxState | ((state: StoreCtxState) => StoreCtxState)) => void
    observe: (cb: () => void) => () => void
 }
 
@@ -23,6 +25,7 @@ export default function getStoreCtxData(): StoreCtxData {
       age: 20,
       details: { address: '' },
       counter: 0,
+      formRef: { current: null },
    })
    const observers = useRef(new Set<() => void>())
 
@@ -42,11 +45,19 @@ export default function getStoreCtxData(): StoreCtxData {
       observers.current.forEach((observer) => observer())
    }, [])
 
+   const setWithNoUpdate = useCallback((value: StoreCtxState | ((state: StoreCtxState) => StoreCtxState)) => {
+      if (typeof value != 'function') {
+         StoreData.current = value
+      } else {
+         StoreData.current = value(StoreData.current)
+      }
+   }, [])
+
    // add the observer to the list
    const observe = useCallback((cb: () => void) => {
       observers.current.add(cb)
       return () => observers.current.delete(cb)
    }, [])
 
-   return { get, set, observe }
+   return { get, set, setWithNoUpdate, observe }
 }

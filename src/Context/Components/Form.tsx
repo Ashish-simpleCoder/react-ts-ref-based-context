@@ -1,8 +1,14 @@
-import { ChangeEvent, InputHTMLAttributes, useEffect } from 'react'
-import { useContextActions, useStateDispatch, useStateSelector } from '../StoreContext/useStoreState'
+import { ChangeEvent, InputHTMLAttributes, useEffect, useRef } from 'react'
+import {
+   useContextActions,
+   useStateDispatch,
+   useStateSelector,
+   useUnWatchedStateSelector,
+} from '../StoreContext/useStoreState'
 
 export default function Form() {
    const setState = useStateDispatch()
+   const formRef = useUnWatchedStateSelector((state) => state.formRef)
    const { resetState } = useContextActions()
 
    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -18,8 +24,13 @@ export default function Form() {
       // setState((old_state) => ({ ...old_state, [e.target.name]: e.target.value }))
    }
 
+   const changeBorder = () => {
+      formRef.current!.style.border = '2px solid red'
+   }
+
    return (
-      <div>
+      <div ref={formRef}>
+         <button onClick={changeBorder}>change bg</button>
          <button style={{ padding: '10px 20px', background: '#4407a7', marginBottom: '20px' }} onClick={resetState}>
             Reset Context State
          </button>

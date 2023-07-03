@@ -10,6 +10,16 @@ export function useStateSelector<SelectorOutput>(selector: (state: StoreCtxState
    return state
 }
 
+export function useUnWatchedStateSelector<SelectorOutput>(
+   selector: (state: StoreCtxState) => SelectorOutput
+): SelectorOutput {
+   const Store = useStoreCtx()
+   if (!Store) throw new Error('no form store found.')
+
+   const state = selector(Store.get())
+   return state
+}
+
 export function useStateDispatch() {
    const FormStore = useStoreCtx()
    if (!FormStore) throw new Error('no form store found.')
