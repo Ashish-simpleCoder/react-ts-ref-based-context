@@ -3,6 +3,7 @@ import { useContextActions, useStateDispatch, useStateSelector } from '../StoreC
 
 export default function Form() {
    const setState = useStateDispatch()
+   const formRef = useStateSelector((state) => state.formRef, false)
    const { resetState } = useContextActions()
 
    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -18,8 +19,13 @@ export default function Form() {
       // setState((old_state) => ({ ...old_state, [e.target.name]: e.target.value }))
    }
 
+   const changeBorder = () => {
+      formRef.current!.style.border = '2px solid red'
+   }
+
    return (
-      <div>
+      <div ref={formRef}>
+         <button onClick={changeBorder}>change bg</button>
          <button style={{ padding: '10px 20px', background: '#4407a7', marginBottom: '20px' }} onClick={resetState}>
             Reset Context State
          </button>
@@ -30,6 +36,7 @@ export default function Form() {
             <FirstNameDisplay />
             <LastNameDisplay />
             <FullNameDisplay />
+            <HiddenInput />
          </div>
          <Address />
          <Counter />
@@ -102,5 +109,24 @@ function Counter() {
          <h3>Counter State</h3>
          <div>counter : {counter}</div>
       </div>
+   )
+}
+
+function HiddenInput() {
+   const setState = useStateDispatch()
+   const hiddenInput = useStateSelector((state) => state.hiddenInput, false)
+
+   console.log(hiddenInput)
+
+   return (
+      <>
+         <h3>hidden input</h3>
+         <Input
+            id='hidden-input'
+            name='hidden-input'
+            placeholder='hidden input'
+            onChange={(e) => setState((state) => ({ ...state, hiddenInput: e.target.value }), false)}
+         />
+      </>
    )
 }
