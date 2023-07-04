@@ -1,9 +1,5 @@
 import { ChangeEvent, InputHTMLAttributes, useEffect } from 'react'
-import {
-   useContextActions,
-   useStateDispatch,
-   useStateSelector
-} from '../StoreContext/useStoreState'
+import { useContextActions, useStateDispatch, useStateSelector } from '../StoreContext/useStoreState'
 
 export default function Form() {
    const setState = useStateDispatch()
@@ -40,6 +36,7 @@ export default function Form() {
             <FirstNameDisplay />
             <LastNameDisplay />
             <FullNameDisplay />
+            <HiddenInput />
          </div>
          <Address />
          <Counter />
@@ -112,5 +109,24 @@ function Counter() {
          <h3>Counter State</h3>
          <div>counter : {counter}</div>
       </div>
+   )
+}
+
+function HiddenInput() {
+   const setState = useStateDispatch()
+   const hiddenInput = useStateSelector((state) => state.hiddenInput, false)
+
+   console.log(hiddenInput)
+
+   return (
+      <>
+         <h3>hidden input</h3>
+         <Input
+            id='hidden-input'
+            name='hidden-input'
+            placeholder='hidden input'
+            onChange={(e) => setState((state) => ({ ...state, hiddenInput: e.target.value }), false)}
+         />
+      </>
    )
 }
